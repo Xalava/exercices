@@ -11,18 +11,21 @@ function fibonacci(n) {
 }
 
 function dessiner(array) {
-	for (var i = 0; i < array.length ; i++) {
-		output = ">"
+  if (!array.length) return
+  
+  for (var i = 0; i < array.length ; i++) {
+		output = "\x1b[0m\x1b[33m" + array[i] // reset, yellow
 		if (i==0 ){
-			for (var j = 0; j < array[i]; j++) {
-				output +="o"
-			}
+      output +="\t" 
+      output +=" 🐇"
 		} else {
+      output +="\t\x1b[1m" //bright
 			for (var j = 0 ; j < array[i-1] ; j++) {
-				output += "O"
-			}
+				output += " 🐇"
+      }
+      output +="\x1b[2m" // dim
 			for (var k = 0 ; k < array[i] - array[i-1]; k++) {
-				output += "o"
+				output += " 🐇"
 			}
 		}
 		console.log(output)
@@ -30,5 +33,4 @@ function dessiner(array) {
 }
 
 liste = fibonacci(process.argv[2])
-console.log("Liste", liste)
 dessiner(liste)
