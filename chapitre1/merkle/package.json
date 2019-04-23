@@ -1,0 +1,14 @@
+{
+  "name": "merkle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "merkle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.20.0"
+  }
+}
