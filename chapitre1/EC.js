@@ -18,11 +18,11 @@ class Moda {
     return true
   }
   // Modulo p
-  mod(a){
-    if (a%this.p<0){
-      return a%this.p+this.p
+  mod(a,p= this.p){
+    if (a%p<0){
+      return a%p+p
     }
-    return a%this.p
+    return a%p
   }
   // Inverse de a. On cherche b tel que a * b = 1 (mod p)
   modinverse(a){
@@ -38,13 +38,20 @@ class Moda {
 
 //Courbe ellitique sur les entiers modulo p
 class ECModa extends Moda{
-  constructor(a, b, p) {
+  constructor(a, b, p, G ) {
     if (4*a**3+27*b**2==0){
       throw "Illegal curve"
     }
     super(p)
-    this.a = a;
-    this.b = b;
+    this.a = a
+    this.b = b
+    //A décommenter pour trouver un G approprié
+    //this.findGs() 
+    if(!this.isElement(G.x,G.y)){
+      throw "G not on the curve"
+    }
+    this.G = G
+    this.n = this.order(G.x,G.y)
   }
   isElement(x, y) {
     return this.mod(y ** 2)== this.mod(x ** 3 + this.a * x + this.b)
@@ -52,16 +59,20 @@ class ECModa extends Moda{
   calculateYpos(x) {
     let res = this.mod(x ** 3 + this.a * x + this.b)
     // Recherche de la racine carrée de y tel que x * x = y (mod p)
-    for (let y = 0; y < this.p; y++) {
+    for (let y = 1; y < this.p; y++) {
       if(this.mod(y**2) == res)
         return y
     }
-    throw "no suitable Y"
+    return 0
   }
   findGs() {
-    for (let i = 0; i < this.p; i++) {
-      if(Number.isInteger(curve.calculateYpos(i)))
-      console.log(i, curve.calculateYpos(i))
+    for (let i = 1; i < this.p; i++) {
+      let y = this.calculateYpos(i)
+      if(y!=0){
+        let n = this.order(i,y)
+        console.log(i, y, n)
+
+      }
     }
   }
   //P + P = R
@@ -83,39 +94,73 @@ class ECModa extends Moda{
         return 0
       let m = (yR-yP ) * this.modinverse(xR-xP)
       xR = this.mod(m ** 2 - xR - xP)
-      yR = this.mod(m * (xP-xR)-yP)
+      yR = this.mod(m * (xP-xR)-yP)//signe à vérifier
       // console.log(`  G${i}`,xR,yR)
     }
     return [xR,yR]
   }
+  // P + Q = R
+  addition(xP,yP,xQ,yQ){
+    if(this.modinverse(xQ-xP)==0)
+      return 0
+    let m = (yQ-yP ) * this.modinverse(xQ-xP)
+    xR = this.mod(m ** 2 - xQ - xP)
+    yR = this.mod(m * (xR-xP)+yP)// Signe à vérifier
+    return [xR,yR]
+  }
+
   // Ordre pour un point donné
-  orderOf(x,y) {
+  order(x,y) {
     for (let i = 1; i < this.p; i++) {
       if(this.scalarMultiplication(x,y,i)==0)
         return i
     }
     return this.p
   }
-
   //Afficher la courbe
   display(){
     return `y²=x³+${this.a}x+${this.b} (mod ${this.p})`
   }
+  //Signature
+  sign(privatekey,hash){
+    let r,s
+    do{
+      let k = Math.ceil(Math.random()* (this.n-2))
+      let P = this.scalarMultiplication(this.G.x,this.G.y,k)
+      r = this.mod(P[0],this.n)
+      s = this.mod(this.modinverse(k) * (hash + r*privatekey),this.n)
+    } while(r==0||s==0)
+    return [r,s]  
+  }
+  //Vérifier signature
+  verify(publickey, hash, signature){
+    let u1 = this.mod(this.modinverse(signature[0])*hash,this.n)
+    let u2 =  this.mod(this.modinverse(signature[0])*signature[1],this.n)
+    let A = this.scalarMultiplication(this.G.x,this.G.y,u1)
+    let B = this.scalarMultiplication(publickey[0],publickey[1],u2)
+    let P = this.addition(A,B)
+    return this.mod(P[0],this.n)==this.mod(signature[0],this.n)
+  }
 }
 
+// Paramètres
 let [a,b]= [0, 7] // Valeur de secp256k1, courbe utilisée dans Bitcoin
 let p = 173 // Petit nombre premier
-let curve = new ECModa(a,b,p)
-let G = {x:2, y:19}// Point générateur choisi sur la courbe
-console.log("G", G,curve.isElement(G.x, G.y)?"is":"IS NOT","element of",curve.display())
-let n = curve.orderOf(G.x,G.y) // Ordre du groupe généré par G
-console.log("The order of G is",n)
+let G = {x:166, y:23}// Point générateur choisi sur la courbe (avec ordre premier)
 
-privatekey = Math.floor(Math.random()*n)
+let curve = new ECModa(a,b,p,G)
+console.log("G", G,"is element of",curve.display())
+console.log("The order of G is",curve.n)
+
+privatekey = Math.floor(Math.random()* (curve.n -1)+1)
 console.log('Private Key >>', privatekey)
 
 publickey = curve.scalarMultiplication(G.x,G.y,privatekey)
 console.log('Public Key >>', publickey)
 
-
+// Signature
+// hash = 1234
+// signature = curve.sign(privatekey,hash)
+// console.log("Signature of",hash,"is",signature)
+// console.log("Verification", curve.verify(publickey,hash,signature))
 
