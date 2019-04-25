@@ -2,6 +2,7 @@
 
 const crypto = require('crypto')
 
+// Fonctions liées à l'arithmétique modulaire
 class Moda {
   constructor(p) {
     if(!this.isPrime(p)){
@@ -16,24 +17,26 @@ class Moda {
       if(n % i === 0) return false
     return true
   }
+  // Modulo p
   mod(a){
     if (a%this.p<0){
       return a%this.p+this.p
     }
     return a%this.p
   }
-  //Brute force version
+  // Inverse de a. On cherche b tel que a * b = 1 (mod p)
   modinverse(a){
     a = this.mod(a);
-    for (var i = 0; i < this.p; i++) {
-        if (this.mod(a*i) == 1) {
-            return i;
+    for (var b = 0; b < this.p; b++) {
+        if (this.mod(a*b) == 1) {
+            return b;
         }
     }
     throw "Mod inverse not found"
   }
 }
 
+//Courbe ellitique sur les entiers modulo p
 class ECModa extends Moda{
   constructor(a, b, p) {
     if (4*a**3+27*b**2==0){
@@ -44,11 +47,11 @@ class ECModa extends Moda{
     this.b = b;
   }
   isElement(x, y) {
-    return y ** 2 % this.p == x ** 3 + this.a * x + this.b% this.p;
+    return this.mod(y ** 2)== this.mod(x ** 3 + this.a * x + this.b)
   }
   calculateYpos(x) {
-    let res = x ** 3 + this.a * x + this.b
-    // brute force version of modular square root
+    let res = this.mod(x ** 3 + this.a * x + this.b)
+    // Recherche de la racine carrée de y tel que x * x = y (mod p)
     for (let y = 0; y < this.p; y++) {
       if(this.mod(y**2) == res)
         return y
@@ -61,12 +64,14 @@ class ECModa extends Moda{
       console.log(i, curve.calculateYpos(i))
     }
   }
+  //P + P = R
   doubling(xP,yP){
     let m = this.mod( (3 * xP**2 + this.a ) * this.modinverse(2*yP))
     let xR = this.mod(m ** 2 - 2 * xP)
     let yR = this.mod(m*(xP - xR) - yP)
     return [xR,yR]
   }
+  //kP = R
   scalarMultiplication(xP,yP, k){
     if (k ==1)
     return [xP, yP]
@@ -78,26 +83,20 @@ class ECModa extends Moda{
       xR = this.mod(m ** 2 - xR - xP)
       yR = this.mod(m * (xP-xR)-yP)
       console.log(`  G${i}`,xR,yR)
-
     }
     return [xR,yR]
   }
 
+  //Afficher la courbe
   display(){
     return `y²=x³+${this.a}x+${this.b} (mod ${this.p})`
   }
 }
 
-
-//  javascript maximum safe interger    2147483647
-// Maximum exact integer : 9007199254740991
-
-let [a,b]= [0, 7] // Scep256k values
-let p = 173 // Small enough prime number
-
+let [a,b]= [0, 7] // Valeur de secp256k1, courbe utilisée dans Bitcoin
+let p = 173 // Petit nombre premier
 let curve = new ECModa(a,b,p)
-
-let G = {x:2, y:19}
+let G = {x:2, y:19}// Point générateur choisi sur la courbe
 console.log("G", G,curve.isElement(G.x, G.y)?"is":"IS NOT","element of",curve.display())
 
 let n = 87 // order of the curve (first k where kG ==0)
