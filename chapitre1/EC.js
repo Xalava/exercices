@@ -32,7 +32,7 @@ class Moda {
             return b;
         }
     }
-    throw "Mod inverse not found"
+    return 0
   }
 }
 
@@ -76,15 +76,25 @@ class ECModa extends Moda{
     if (k ==1)
     return [xP, yP]
     let [xR, yR] = this.doubling(xP,yP)
-    console.log("  G2",xR,yR)
+    // console.log("  G2",xR,yR)
 
     for(let i=3;i<=k;i++){
+      if(this.modinverse(xR-xP)==0)
+        return 0
       let m = (yR-yP ) * this.modinverse(xR-xP)
       xR = this.mod(m ** 2 - xR - xP)
       yR = this.mod(m * (xP-xR)-yP)
-      console.log(`  G${i}`,xR,yR)
+      // console.log(`  G${i}`,xR,yR)
     }
     return [xR,yR]
+  }
+  // Ordre pour un point donné
+  orderOf(x,y) {
+    for (let i = 1; i < this.p; i++) {
+      if(this.scalarMultiplication(x,y,i)==0)
+        return i
+    }
+    return this.p
   }
 
   //Afficher la courbe
@@ -98,8 +108,9 @@ let p = 173 // Petit nombre premier
 let curve = new ECModa(a,b,p)
 let G = {x:2, y:19}// Point générateur choisi sur la courbe
 console.log("G", G,curve.isElement(G.x, G.y)?"is":"IS NOT","element of",curve.display())
+let n = curve.orderOf(G.x,G.y) // Ordre du groupe généré par G
+console.log("The order of G is",n)
 
-let n = 87 // order of the curve (first k where kG ==0)
 privatekey = Math.floor(Math.random()*n)
 console.log('Private Key >>', privatekey)
 
