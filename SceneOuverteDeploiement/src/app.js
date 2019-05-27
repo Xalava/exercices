@@ -41,11 +41,13 @@ async function rafraichir() {
   let encours = await dapp.Contrat.artisteEnCours()
   document.getElementById("encours").innerHTML = encours
 
+  let listeHTML =  document.getElementById("liste")
+  listeHTML.innerHTML = ""
   for (var i = 0; i <12-creneauxLibres; i++) {
     let artiste= await dapp.Contrat.passagesArtistes(i)
     let  listitem = document.createElement("li") //
     listitem.innerHTML = ` ⭐ ${artiste} ⭐ `
-    document.getElementById("liste").appendChild(listitem)
+    listeHTML.appendChild(listitem)
   }
 }
 
