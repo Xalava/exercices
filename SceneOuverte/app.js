@@ -37,7 +37,7 @@ async function rafraichir() {
   document.getElementById("creneaux").innerHTML = creneauxLibres
   let encours = await dapp.Contrat.artisteEnCours()
   document.getElementById("encours").innerHTML = encours
-
+  document.getElementById("liste").innerHTML = ""
   for (var i = 0; i <12-creneauxLibres; i++) {
     let artiste= await dapp.Contrat.passagesArtistes(i)
     let  listitem = document.createElement("li") //
