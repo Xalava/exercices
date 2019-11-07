@@ -4,9 +4,9 @@ let dapp = {}
 
 
 console.log(data)
-function ajouterArtiste(){
+async function ajouterArtiste(){
   let artiste = document.getElementById("nomartiste").value
-  dapp.ContratSigner.sInscrire(artiste)
+  await dapp.ContratSigner.sInscrire(artiste)
   rafraichir()
 }
 

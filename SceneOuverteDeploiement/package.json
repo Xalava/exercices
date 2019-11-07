@@ -6,13 +6,14 @@
   "scripts": {
     "clean": "rm build/*",
     "compile": "solc --combined-json abi,bin contracts/SceneOuverte.sol > build/SceneOuverte.json",
-    "deploy":"node deploy.js",
-    "serve":"live-server src/",
+    "deploy": "node deploy.js",
+    "serve": "live-server src/",
     "start": "npm run compile && npm run deploy && npm run serve"
   },
   "author": "Xavier Lavayssière",
   "license": "ISC",
   "dependencies": {
-    "ethers": "^4.0.28"
+    "ethers": "^4.0.28",
+    "openzeppelin-solidity": "^2.3.0"
   }
 }
