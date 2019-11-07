@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title> Epinglage</title>
+
+</head>
+<body>
+
+<div id="app">
+  <h5>Bienvenue {{ nom }}</h5>
+  <button v-on:click="connectMetamask()">Connect to Metamask</button> 
+  <button v-on:click="connectLocally()">Connect to local node with browser wallet</button> 
+  <section  v-show="connected">
+    <p v-if="network">Current Network : {{network.name}} (n° {{network.chainId}})</sup></p>
+
+    <h5>Add document</h5>
+    <input type="file" id="fichier" v-on:change="loadDocument()">
+    <button v-on:click="addDocument()">add document</button> 
+    <!-- <button v-on:click="checkDocument()">check document</button>  -->
+    <button v-on:click="pinDocument()">pin document</button> 
+    <p v-show="checkedDocDate"> {{checkedDocDate}}</p>
+  </section>
+</div>
+<script src="https://unpkg.com/ipfs-http-client/dist/index.min.js"></script>
+<script src="https://unpkg.com/ipfs/dist/index.min.js"></script>
+<script src="https://cdn.ethers.io/scripts/ethers-v4.min.js"></script>
+<script src="./data.js"></script> 
+<script src="./app.js"></script>
+
+
+</body>
+</html>
+

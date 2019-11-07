@@ -1,0 +1,19 @@
+{
+  "name": "epinglage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm build/*",
+    "compile": "solc --combined-json abi,bin contracts/Register.sol > build/Register.json",
+    "launch": "node epinglage.js",
+    "start": "npm run compile && npm run launch"
+  },
+  "author": "Xavier Lavayssière",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "^4.0.28",
+    "express": "^4.17.1",
+    "ipfs": "^0.36.3"
+  }
+}
