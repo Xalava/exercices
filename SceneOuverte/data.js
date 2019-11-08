@@ -1,4 +1,4 @@
-let contractAddress = "0xd7beb8308e343c4d40cc9c05c03690f79341a557"
+let contractAddress = "" // <- coller ici entre les guillemets
 let contractABI =[
 	{
 		"constant": true,

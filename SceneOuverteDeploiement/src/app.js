@@ -36,6 +36,7 @@ async function rafraichir() {
     ntw => {document.getElementById("network").innerHTML = JSON.stringify(ntw);
     console.log(ntw)  
   })
+  document.getElementById("adressecontrat")= contractAddress
   let creneauxLibres = await dapp.Contrat.creneauxLibres()
   document.getElementById("creneaux").innerHTML = creneauxLibres
   let encours = await dapp.Contrat.artisteEnCours()

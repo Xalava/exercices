@@ -5,34 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Scene Ouverte</title>
-
-
-
 </head>
 <body>
+  
   <h1>Scene Ouverte</h1>
 
-  <div>Réseau : </div><span id="network"></span></div>
-  <div>Creneaux Libres : <span id="creneaux"></span></div>
-  <div>Artiste en cours : <span id="encours"></span></div>
+  <section>
+    <h3>Réseau </h3>
+    <p id="network">Non detecté</p> 
+    <p>Adresse du contrat : <span id="adressecontrat">Vide</span></p>   
+  </section>
+  
+  <section>
+    <h3>Actions</h3>
+    <p>Ajouter un Artiste : 
+      <input type="text" id="nomartiste">
+      <button onclick="ajouterArtiste()">ajouter</button>
+    </p>
+  </section>
 
-  <h5>Ajouter un Artiste</h5>
-  <input type="text" id="nomartiste">
-  <button onclick="ajouterArtiste()">ajouter</button>
-
-  <h5>Liste des artistes</h5>
-  <ul id="liste">
-    
-  </ul>
-
+  <section>
+    <h3>Informations</h3>
+    <p>Creneaux Libres : <span id="creneaux"></span></p>
+    <p>Artiste en cours : <span id="encours"></span></p>
+    <p>Liste des artistes : </p>
+    <ol id="liste" start="0">
+    </ol>
+  </section>
 
   <script src="https://cdn.ethers.io/scripts/ethers-v4.min.js"></script>
 
   <script src="./data.js"></script>
   
-  <script src="./app.js">
-
-  </script>
+  <script src="./app.js"></script>
 
 </body>
 </html>

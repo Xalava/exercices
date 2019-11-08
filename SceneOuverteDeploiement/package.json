@@ -13,7 +13,6 @@
   "author": "Xavier Lavayssière",
   "license": "ISC",
   "dependencies": {
-    "ethers": "^4.0.28",
-    "openzeppelin-solidity": "^2.3.0"
+    "ethers": "^4.0.28"
   }
 }
