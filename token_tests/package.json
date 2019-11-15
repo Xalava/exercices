@@ -1,0 +1,16 @@
+{
+  "name": "token-tests",
+  "version": "0.0.1",
+  "engines": {
+    "node": "12.13.0",
+    "npm": "6.12.x"
+  },
+  "devDependencies": {
+    "solidity-coverage": "^0.6.7",
+    "truffle": "^5.0.44"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^2.4.0",
+    "@openzeppelin/test-helpers": "^0.5.3"
+  }
+}
