@@ -13,6 +13,7 @@
   "author": "Xavier Lavayssière",
   "license": "ISC",
   "dependencies": {
-    "ethers": "^4.0.28"
+    "ethers": "^4.0.28",
+    "solidity-docgen": "^0.3.13"
   }
 }
