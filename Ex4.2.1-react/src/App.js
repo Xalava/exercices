@@ -1,5 +1,5 @@
 import React, { Component } from '../node_modules/react'
-import Web3 from '../node_modules/web3/types'
+import Web3 from 'web3'
 import './App.css'
 
 class App extends Component {
