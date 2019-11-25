@@ -22,11 +22,18 @@ ganache-cli et metamask sont déjà installés sur [cryptotux](https://cryptotux
 #### Version SceneOuverteDeploiement
 Cette version offre un exemple complet avec le script de déploiement. 
 - `npm install`
-- installer solc (cf. documentation de solc)
+- installer solc (Voir la documentation de solc)
 - `npm start`
 
 Cette dernière commande combine la compilation, le déploiement sur un noeud local et le lancement du serveur web. Pour plus de détails, voir le fichier package.json et l'image ci-dessous.
 ![etapes](SceneOuverteDeploiement/etapes.png)
+
+Pour génerer la documentation à partir des décorations dans le smart contract : 
+`npx solidity-docgen` 
+- [Contrat annnoté](https://github.com/Xalava/exercices/blob/master/SceneOuverteDeploiement/contracts/SceneOuverte.sol)
+- [Résultat](https://github.com/Xalava/exercices/blob/master/SceneOuverteDeploiement/docs/index.md)
+- [documentation](https://github.com/OpenZeppelin/solidity-docgen)
+
 
 ## ChargerImage
 Exemple pour charger une image du systeme de fichier dans une page web
